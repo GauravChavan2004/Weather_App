@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.*;
 import java.sql.Date;
 import java.util.Scanner;
 
@@ -48,7 +49,7 @@ public class MyServlet extends HttpServlet {
 				String apikey ="3069b57405d1fcb106612fe91470b052";
 				//create URL for the openWeatherMap API request
 				String apiUrl ="https://api.openweathermap.org/data/2.5/weather?q="+cityInput+"&appid="+apikey;
-				//API integration
+				//API integration.
 				URL url =new URL(apiUrl);
 				HttpURLConnection connection=(HttpURLConnection)url.openConnection();
 				connection.setRequestMethod("GET");
@@ -65,10 +66,10 @@ public class MyServlet extends HttpServlet {
 				scanner.close();
 				Gson gson=new Gson();
 				JsonObject jsonObject=gson.fromJson(responseContent.toString(),JsonObject.class);
-				//Date & Time
+				//fetch Date & Time from JSON file
 		        long dateTimestamp = jsonObject.get("dt").getAsLong() * 1000;
 		        String date = new Date(dateTimestamp).toString();
-		        
+		        String Time = new Time(dateTimestamp).toString();
 		        //Temperature
 		        double temperatureKelvin = jsonObject.getAsJsonObject("main").get("temp").getAsDouble();
 		        int temperatureCelsius = (int) (temperatureKelvin - 273.15);
@@ -92,6 +93,18 @@ public class MyServlet extends HttpServlet {
 		        connection.disconnect();
 		     // Forward the request to the weather.jsp page for rendering
 		        request.getRequestDispatcher("index.jsp").forward(request, response);
+		        //DataBase to store all details of Weather
+		        Connection con=null;
+	            try {
+	                Class.forName("com.mysql.cj.jdbc.Driver");
+	                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Weather", "root", "");
+	                String sql = "insert into Weather_Data2 values('"+date+"','"+Time+"','"+cityInput+"',"+temperatureCelsius+",'"+weatherCondition+"',"+humidity+","+windSpeed+")";
+	                Statement ps = con.createStatement();
+	                ps.executeUpdate(sql);
+	                con.close();
+	            } catch (Exception se) {
+	                System.out.print("exception"+se.toString());
+	            }
 			}
 
 }

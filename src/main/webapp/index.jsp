@@ -26,7 +26,7 @@
                 <div>
                     <h2 class="text-center">${cityInput}</h2>
                     <div class="text-center">
-                        <h2>${temperature}°C</h2>
+                        <h2>${temperature}°</h2>
                     </div>
                     <div class=" text-center" style="margin-top: 0px;">
 
@@ -55,7 +55,7 @@
                 </div>
             </div>
         </div>
-
+<button onclick="document.location='History.jsp'" class="btn btn-success m-4">History</button>
     </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
